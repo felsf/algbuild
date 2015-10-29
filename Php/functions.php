@@ -1,6 +1,7 @@
 <?php
 
-function printv($vector)
-{
-	for($a = 0; $a < count($vector); $a++) echo $vector[$a]."\n";
+function printv($vector) {
+	foreach($vector as $element)
+		echo $element."\n";
+	echo "<br>";
 }

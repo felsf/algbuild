@@ -4,52 +4,42 @@
 ** Bubble Sort Algorithm
 */
 
-function bubbleSort_1($vector)
+require_once('functions.php');
+
+function bubble_1($vector) // Normal
 {
-	$limit = count($vector);
-	require_once('functions.php');
+	$limite = 0;
 	
-	while($limit > 0)
+	for(; $limite < count($vector); $limite++)
 	{
-		echo "<br>";
-		printv($vector);
-		
-		for($a = 0; $a < $limit-1; $a++) {
-			if($vector[$a] > $vector[$a+1]) {
+		for($a = 0; $a < count($vector) - $limite - 1; $a++)
+		{
+			if($vector[$a] > $vector[$a+1]) { 
 				$aux = $vector[$a];
 				$vector[$a] = $vector[$a+1];
 				$vector[$a+1] = $aux;
 			}
-		}
-		
-		$limit--;
-	}	
+		}		
+	}
 	
 	return $vector;
 }
 
-function bubbleSort_2($vector)
+function bubble_2($vector) // Inverse
 {
-	$limit = count($vector);
-	require_once('functions.php');
+	$limite = 0;
 	
-	while($limit > 0)
+	for(; $limite < count($vector); $limite++)
 	{
-		echo "<br>";
-		printv($vector);
-		
-		for($a = 0; $a < $limit-1; $a++) {
-			if($vector[$a] < $vector[$a+1]) {
+		for($a = 0; $a < count($vector) - $limite - 1; $a++)
+		{
+			if($vector[$a] < $vector[$a+1]) { 
 				$aux = $vector[$a];
 				$vector[$a] = $vector[$a+1];
 				$vector[$a+1] = $aux;
 			}
-		}
-		
-		$limit--;
-	}	
+		}		
+	}
 	
 	return $vector;
 }
-
-bubbleSort_2(array(5, 9, 0, 2, 1, 3, 7, 10, 24, 15, 18, 17, 13, 6));
