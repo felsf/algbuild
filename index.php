@@ -8,19 +8,89 @@
 <script src="scripts/js/jquery-1.11.3.min.js"></script>
 <script src="scripts/js/bootstrap.min.js"></script>
 <script src="scripts/js/Chart.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 
 <script>
-var x = 0;
-function teste() {
-	document.getElementById('texter').value = x++;
-}
+	var app = angular.module('MyApp', []);
+	
+	app.controller('OptionsController', function($scope) {
+		$scope.buttons = [
+			{Class: "btn btn-lg btn-info", Model: "SS", Value: "Shell Sort", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "QS", Value: "Quick Sort", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "MS", Value: "Merge Sort", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "BS", Value: "Bin Sort", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "RS", Value: "Radix Sort", Actived: false},
+		];
+
+		$scope.fields = [
+			{ID: "input", Model: "input", Name: "", Type: 'number', Class: "", Value: "", Label: "Quantidade de elementos no Array", Click: ""},			
+			{ID: "repeat", Model: "repeat", Name: "repeat", Type: 'checkbox', Class: '', Value: "", Label: "Repetir números?", Click: ""},
+			{ID: "decreased", Model: "decreased", Name: "decreased", Type: 'checkbox', Class: '', Value: "", Label: "Ordenar Decrementalmente?", Click: ""},
+			{ID: "submit", Model: "submit", Name: "post", Type: 'button', Class: 'btn btn-lg btn-success', Value: "-", Label: "", Click: ""}
+		];
+
+		$scope.menu = {title: "", text: ""};
+		$scope.resposta = {title: "", text: ""};
+		//--------------------------------------------------------//
+
+		$scope.select = function(button) {
+			$scope.menu.title = "Algoritmo de "+button.Value;
+			for(index in $scope.buttons) {
+				var bt = $scope.buttons[index];
+				if(bt.Actived) {
+					bt.Class = "btn btn-lg btn-info";
+					bt.Actived = false;
+				}
+			}			
+
+			button.Actived = true;
+			button.Class += " btn-danger";
+
+			$scope.fields[$scope.fields.length-1].Value = "Processar "+button.Value;			
+		};
+
+		$scope.processar = function(element) {
+			if(element.Type != "button" && element.Type != "submit") return;
+			var quantidade = document.getElementById('input').value;
+
+			if(quantidade < 2) {
+				alert("Insira ao menos 2 valores para serem gerados.");
+				return;
+			}
+
+			var post = $.post("scripts/gerador.php", { quant: quantidade });					
+			post.done(function(data) {
+				$scope.resposta.title = quantidade+" Elementos gerados!";
+				document.getElementById('resposta').innerHTML = data;
+			});
+		}		
+	});
+
 </script>
 
-<body ng-app="" onLoad="setInterval(function(){teste()}, 1000)">
+<body ng-app="MyApp">
 
-<input type="text" ng-model="texter" id="texter">
+<div class="navbar navbar-default" style="background-color: orange; box-shadow: 1px 1px 1px #000">
+	<div style='font-size: 36px; text-align: center; font-family: "Courier new"'>Trabalho de Construção de Algoritmos</div>
+</div>
 
-<h3>{{texter}}</h3>
+<div ng-controller="OptionsController">
+	<center><span ng-repeat="button in buttons" ng-init="select(buttons[0])">
+		<input type='button' ng-click="select(button); " ng-model="button.Model" class={{button.Class}} value={{button.Value}}>		
+	</span></center><hr>
+	<div ng-model='menu'>
+		<center><h2>{{menu.title}}</h2></center>
+		<center><div class='container' ng-repeat="field in fields">
+			<div><label for="name">{{field.Label}}<input type={{field.Type}} id={{field.ID}} name={{field.Name}} class={{field.Class}} value={{field.Value}} ng-model="field.Model" ng-click="processar(field)" style='text-align: center'></label></div><br>			
+		</div></center>
+	</div><hr>
+	<center><div>
+		<h3>{{resposta.title}}</h3>
+		<div id='resposta'>{{resposta.text}}</div>
+	</div></center>
+</div>
+
+
+
 
 </body>
