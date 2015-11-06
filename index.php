@@ -10,16 +10,28 @@
 <script src="scripts/js/Chart.min.js"></script>
 <link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 
+<?php 
+
+//require('php/functions.php');
+//require('php/shell.php');
+
+//require('php/.php');
+//require('php/bin.php');
+//require('php/bin.php');
+
+?>
+
 <script>
 	var app = angular.module('MyApp', []);
-	
+	var current_actived = null;
+
 	app.controller('OptionsController', function($scope) {
 		$scope.buttons = [
-			{Class: "btn btn-lg btn-info", Model: "SS", Value: "Shell Sort", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "QS", Value: "Quick Sort", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "MS", Value: "Merge Sort", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "BS", Value: "Bin Sort", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "RS", Value: "Radix Sort", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "SS", Value: "Shell Sort", Id: "shell.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "QS", Value: "Quick Sort", Id: "quick.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "MS", Value: "Merge Sort", Id: "merge.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "BS", Value: "Bin Sort", Id: "bin.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "RS", Value: "Radix Sort", Id: "radix.php", Actived: false},
 		];
 
 		$scope.fields = [
@@ -44,6 +56,7 @@
 			}			
 
 			button.Actived = true;
+			current_actived = button;
 			button.Class += " btn-danger";
 
 			$scope.fields[$scope.fields.length-1].Value = "Processar "+button.Value;			
@@ -58,10 +71,26 @@
 				return;
 			}
 
-			var post = $.post("scripts/gerador.php", { quant: quantidade });					
+			/*$.ajax({
+				type: "POST",
+				url: "php/Gerador.php"
+			});*/
+
+			var post = $.post("php/Gerador.php", { quant: quantidade });					
 			post.done(function(data) {
 				$scope.resposta.title = quantidade+" Elementos gerados!";
 				document.getElementById('resposta').innerHTML = data;
+
+				var alg = $.post("php/"+current_actived.Id, {vector: data})
+
+				alg.done(function(data) {
+					alert('done');
+				});
+
+				alg.fail(function() {
+					alert("Não implementando ainda.");
+				});
+				
 			});
 		}		
 	});

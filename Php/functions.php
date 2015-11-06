@@ -13,3 +13,7 @@ function printvl($vector) {
 	}
 	echo "</ul>";
 }
+
+function toMS($valor) {
+	return intval($valor*1000);
+}
