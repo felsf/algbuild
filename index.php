@@ -45,11 +45,20 @@
 		$scope.resposta = {title: "", text: ""};
 		//--------------------------------------------------------//
 
-		$scope.select = function(button) {
+		$scope.getActiveButton = function() {
+			for(var a = 0; a < $scope.buttons.length; a++) {
+				if($scope.buttons[a].Actived) return $scope.buttons[a].Id;
+			}				
+		}
+
+		$scope.select = function(button) 
+		{
 			$scope.menu.title = "Algoritmo de "+button.Value;
-			for(index in $scope.buttons) {
+			for(index in $scope.buttons) 
+			{
 				var bt = $scope.buttons[index];
-				if(bt.Actived) {
+				if(bt.Actived) 
+				{
 					bt.Class = "btn btn-lg btn-info";
 					bt.Actived = false;
 				}
@@ -62,36 +71,27 @@
 			$scope.fields[$scope.fields.length-1].Value = "Processar "+button.Value;			
 		};
 
-		$scope.processar = function(element) {
+		$scope.processar = function(element) 
+		{
 			if(element.Type != "button" && element.Type != "submit") return;
 			var quantidade = document.getElementById('input').value;
 
-			if(quantidade < 2) {
+			if(quantidade < 2) 
+			{
 				alert("Insira ao menos 2 valores para serem gerados.");
 				return;
 			}
 
-			/*$.ajax({
+			$.ajax({
 				type: "POST",
-				url: "php/Gerador.php"
-			});*/
-
-			var post = $.post("php/Gerador.php", { quant: quantidade });					
-			post.done(function(data) {
-				$scope.resposta.title = quantidade+" Elementos gerados!";
-				document.getElementById('resposta').innerHTML = data;
-
-				var alg = $.post("php/"+current_actived.Id, {vector: data})
-
-				alg.done(function(data) {
-					alert('done');
-				});
-
-				alg.fail(function() {
-					alert("Não implementando ainda.");
-				});
-				
-			});
+				url: "php/Gerador.php",
+				data: {quant: quantidade, type: ($scope.getActiveButton) },				
+				dataType: "json",
+				success: function(data) 
+				{
+					
+				}
+			});			
 		}		
 	});
 

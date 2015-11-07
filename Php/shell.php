@@ -7,7 +7,6 @@
 namespace php;
 
 require("Algoritmo.php");
-require("Gerador.php");
 
 class Shell extends Algoritmo {
 	
@@ -48,9 +47,4 @@ class Shell extends Algoritmo {
 		
 		return $vector;
 	}
-}
-
-if(isset($_POST['vector'])) {
-	$shell = new Shell();
-	printv($shell->run($_POST['vector']));
 }
