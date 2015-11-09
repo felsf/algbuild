@@ -6,6 +6,8 @@
 
 namespace php;
 
+require_once('Algoritmo.php');
+
 class Shell extends Algoritmo {
 	
 	public function run($vector, $gap = 2) 
@@ -45,3 +47,9 @@ class Shell extends Algoritmo {
 		return $vector;
 	}
 }
+
+/*
+require_once('Gerador.php');
+$quick = new Shell();
+$g = new Gerador();
+$quick->run($g->gerar(50000));*/

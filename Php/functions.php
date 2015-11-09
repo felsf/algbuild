@@ -15,5 +15,5 @@ function printvl($vector) {
 }
 
 function toMS($valor) {
-	return intval($valor*1000);
+	return ($valor) *1000;
 }

@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Felipe
- * Date: 03-Nov-15
- * Time: 11:19 PM
- */
 
+/*
+    Radix Sort Algorithm
+*/
 namespace php;
-
-require('Algoritmo.php');
-require('functions.php');
-
 
 class Radix extends Algoritmo
 {

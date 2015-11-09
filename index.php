@@ -27,11 +27,11 @@
 
 	app.controller('OptionsController', function($scope) {
 		$scope.buttons = [
-			{Class: "btn btn-lg btn-info", Model: "SS", Value: "Shell Sort", Id: "shell.php", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "QS", Value: "Quick Sort", Id: "quick.php", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "MS", Value: "Merge Sort", Id: "merge.php", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "BS", Value: "Bin Sort", Id: "bin.php", Actived: false},
-			{Class: "btn btn-lg btn-info", Model: "RS", Value: "Radix Sort", Id: "radix.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "SS", Value: "Shell Sort", Id: "Shell.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "QS", Value: "Quick Sort", Id: "Quick.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "MS", Value: "Merge Sort", Id: "Merge.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "BS", Value: "Bin Sort", Id: "Bin.php", Actived: false},
+			{Class: "btn btn-lg btn-info", Model: "RS", Value: "Radix Sort", Id: "Radix.php", Actived: false},
 		];
 
 		$scope.fields = [
@@ -42,7 +42,8 @@
 		];
 
 		$scope.menu = {title: "", text: ""};
-		$scope.resposta = {title: "", text: ""};
+		$scope.resposta = {title: "-", text: "-"};
+		$scope.resultados = [];
 		//--------------------------------------------------------//
 
 		$scope.getActiveButton = function() {
@@ -86,18 +87,33 @@
 				type: "POST",
 				url: "php/Gerador.php",
 				data: {quant: quantidade, type: ($scope.getActiveButton) },				
-				dataType: "json",
+				dataType: "html",
 				success: function(data) 
 				{
-					
+					$("#resposta").hide(1000, function() {
+						$(this).fadeIn(1000);
+					});
+
+					$scope.resposta.title = "Resultados do procedimento";
+					$scope.resposta.text = data;
 				}
 			});			
 		}		
 	});
 
+	function test()	
+	{
+		var data = {
+			labels: ["1", "2", "3", "4"]
+		};
+		var chart = document.getElementById('chart').getContext("2d");
+		new Chart(chart).polarArea(data);
+
+	}
+
 </script>
 
-<body ng-app="MyApp">
+<body ng-app="MyApp" onLoad="test()">
 
 <div class="navbar navbar-default" style="background-color: orange; box-shadow: 1px 1px 1px #000">
 	<div style='font-size: 36px; text-align: center; font-family: "Courier new"'>Trabalho de Construção de Algoritmos</div>
@@ -113,10 +129,11 @@
 			<div><label for="name">{{field.Label}}<input type={{field.Type}} id={{field.ID}} name={{field.Name}} class={{field.Class}} value={{field.Value}} ng-model="field.Model" ng-click="processar(field)" style='text-align: center'></label></div><br>			
 		</div></center>
 	</div><hr>
-	<center><div>
+	<center><div id='resposta'>
 		<h3>{{resposta.title}}</h3>
-		<div id='resposta'>{{resposta.text}}</div>
-	</div></center>
+		<div>{{resposta.text}}</div>
+	</div></center><hr>
+	<canvas id="chart" width="400" height="400"></canvas>
 </div>
 
 
