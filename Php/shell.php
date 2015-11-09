@@ -6,13 +6,10 @@
 
 namespace php;
 
-require("Algoritmo.php");
-
 class Shell extends Algoritmo {
 	
 	public function run($vector, $gap = 2) 
 	{
-		echo "** Processando com GAP de <b>".$gap."</b><br>";
 		$current = count($vector) / $gap;
 		$current = intval($current);
 		
