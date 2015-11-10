@@ -75,6 +75,6 @@ if(isset($_POST['type']))
 
 	$final = explode('.', round($inicio) - microtime(true));
 	$final = explode($final[1][3], $final[1]);
-	echo "Tempo de processamento: ".round($final[0], 3)."ms.";
+	echo round($final[0], 3);	
 }
 
