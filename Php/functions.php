@@ -15,5 +15,5 @@ function printvl($vector) {
 }
 
 function toMS($valor) {
-	return ($valor) *1000;
+	return round(($valor) *1000, 4);
 }

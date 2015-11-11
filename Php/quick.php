@@ -6,6 +6,8 @@
 
 namespace php;
 
+require_once('Gerador.php');
+
 class Quick extends Algoritmo {
 
 	public function run($vector, $esquerda, $direita)
@@ -33,29 +35,6 @@ class Quick extends Algoritmo {
 	    } 
 	    
 	    if ($dir > $esquerda) $this->run($vector, $esquerda, $dir);  
-	    if ($esq < $direita)  $this->run($vector, $esq, $direita); 
-        return $numTroca; 
-	}
-
-	public function partition($array, $ini, $fim) {
-		$a = 0;	$esquerda = 0; $direita = 0; $aux = 0;
-		$a = $array[$ini];
-		$esquerda = $ini;
-		$direita = $fim;
-
-		while($esquerda < $direita) {
-			while($array[$esquerda] <= $a && $esquerda < $direita) $esquerda++;
-			while($array[$direita--] > $a);
-
-			if($esquerda < $direita) {
-				$aux = $array[$esquerda];
-				$array[$esquerda] = $array[$direita];
-				$array[$direita] = $aux;
-			}
-		}
-
-		$array[$ini] = $array[$direita];
-		$array[$direita] = $a;
-		return $direita;
-	}
+	    if ($esq < $direita)  $this->run($vector, $esq, $direita); 	    
+	}	
 }

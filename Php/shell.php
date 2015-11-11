@@ -1,55 +1,51 @@
-<?php
-
-/*
-** Shell Sort Algorithm
-*/
-
+<?php 
 namespace php;
 
-require_once('Algoritmo.php');
+require_once('Gerador.php');
+require_once('functions.php');
 
-class Shell extends Algoritmo {
+function run($vector, $gap = 2) 
+{
+	$current = count($vector) / $gap;
+	$current = intval($current);
 	
-	public function run($vector, $gap = 2) 
+	while($current > 0)
 	{
-		$current = count($vector) / $gap;
-		$current = intval($current);
-		
-		while($current > 0)
+		for($a = 0; ($current+$a) < count($vector); $a++)
 		{
-			for($a = 0; ($current+$a) < count($vector); $a++)
+			if($vector[$a] > $vector[$current + $a]) 
 			{
-				if($vector[$a] > $vector[$current + $a]) {
-					$aux = $vector[$a];
-					$vector[$a] = $vector[$current + $a];
-					$vector[$current + $a] = $aux;			
-				}
+				$aux = $vector[$a];
+				$vector[$a] = $vector[$current + $a];
+				$vector[$current + $a] = $aux;			
 			}
+		}
 			
 			$current /= $gap;
 			$current = intval($current);		
-		}
+	}
 		
-		$current = 0;
+	$current = 0;
 		
-		for($a = 0; $a < count($vector); $a++, $current++)
+	for($a = 0; $a < count($vector); $a++, $current++)
+	{
+		for($b = $current; $b > 0; $b--)
 		{
-			for($b = $current; $b > 0; $b--)
+			if($vector[$b-1] > $vector[$b]) 
 			{
-				if($vector[$b-1] > $vector[$b]) {
-					$aux = $vector[$b];
-					$vector[$b] = $vector[$b-1];
-					$vector[$b-1] = $aux;
-				}
+				$aux = $vector[$b];
+				$vector[$b] = $vector[$b-1];
+				$vector[$b-1] = $aux;
 			}
 		}
+	}		
 		
-		return $vector;
-	}
+	
 }
 
-/*
-require_once('Gerador.php');
-$quick = new Shell();
-$g = new Gerador();
-$quick->run($g->gerar(50000));*/
+$testes = 1;
+$array = (new Gerador())->gerar($_POST['quant'], $_POST['repeat']);
+$ini = microtime(true);
+for($a = 0; $a < $testes; $a++) run($array);
+$fim = microtime(true) - $ini;
+echo $fim;
