@@ -84,8 +84,7 @@
 		];		
 
 		$scope.menu = {title: "", text: ""};
-		$scope.resposta = {title: "-", text: "-"};
-		$scope.resultados = [ [], [], [], [], [] ];
+		$scope.resposta = {title: "-", text: "-"};		
 
 		//--------------------------------------------------------//
 
@@ -171,6 +170,12 @@
 		background-color: green;		
 		border: none;
 	}
+	#btn-resultados:hover
+	{
+		background-color: orange;
+		border: none;
+		color: blue!important;
+	}
 </style>
 
 <body ng-app="MyApp" background="wp.jpg">
@@ -180,9 +185,12 @@
 </div>
 
 <div ng-controller="OptionsController">
-	<center><span ng-repeat="button in buttons" ng-init="select(buttons[0]); loadGraphics()">
-		<input type='button' ng-click="select(button); " ng-model="button.Model" class={{button.Class}} value={{button.Value}}>		
-	</span><br><br><input type='button' id='btn-graphics' data-toggle="modal" data-target="#Modal0" class='btn btn-lg btn-warning' value='Graphics!'>
+	<center>
+		<span ng-repeat="button in buttons" ng-init="select(buttons[0]); loadGraphics()">
+			<input type='button' ng-click="select(button); " ng-model="button.Model" class={{button.Class}} value={{button.Value}}>		
+		</span><br><br>
+		<input type='button' id='btn-graphics' data-toggle="modal" data-target="#Modal0" class='btn btn-lg btn-warning' value='Graphics!'>
+		<a href='resultados.php'><button class='btn btn-lg btn-danger' type='button' id='btn-resultados'>Results!</button></a>
 	</center><hr>
 	<div ng-model='menu'>
 		<center><h2>{{menu.title}}</h2></center>

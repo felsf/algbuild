@@ -1,1 +1,0 @@
-Parte em C#
