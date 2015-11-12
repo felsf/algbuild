@@ -173,7 +173,7 @@
 	}
 </style>
 
-<body ng-app="MyApp" onLoad="">
+<body ng-app="MyApp" background="wp.jpg">
 
 <div class="navbar navbar-default" style="background-color: orange; box-shadow: 1px 1px 1px #000">
 	<div style='font-size: 36px; text-align: center; font-family: "trebuchet"'>Trabalho de Construção de Algoritmos</div>
