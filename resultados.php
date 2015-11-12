@@ -27,20 +27,24 @@ require_once('connection.php');
 	?>
 	
 	angular.module('Resultados', ['chart.js']).controller('ResultsController', function($scope) {
-		$scope.charts = [
-			<?php $resultados = $db->query('SELECT * FROM resultados GROUP BY elementos ORDER BY elementos ASC'); ?>			
-			<?php while($row = $resultados->fetchArray()): ?>
-			{
-				ID: "<?= 'resultados'.$row['elementos']; ?>",
-				Data: [ [0, 0, 0, 0, 0], ],
-				Labels: ['Shell Sort', 'Quick Sort', 'Merge Sort', 'Bin Sort', 'Radix Sort'],
-				Navegador: "<?= $row['navegador']; ?>",
-				Elementos: <?= $row['elementos']; ?>,
-			},
-			<?php endwhile; ?>			
+			$scope.charts = [
+			<?php for($a = 0; $a < intval($db->query('SELECT COUNT(*) from resultados')->fetchArray()); $a++): ?>
+				<?php $resultados = $db->query('SELECT * FROM resultados GROUP BY resultado_id'); ?>
+				<?php while($row = $resultados->fetchArray()): ?>
+				{
+					ID: "<?= 'resultados'.$row['resultado_id']; ?>",
+					ResultadoID: <?= $row['resultado_id']; ?>,
+					Data: [ [0, 0, 0, 0, 0], ],
+					Labels: ['Shell Sort', 'Quick Sort', 'Merge Sort', 'Bin Sort', 'Radix Sort'],
+					Navegador: "<?= $row['navegador']; ?>",
+					Elementos: <?= $row['elementos']; ?>,	
+				},
+				<?php endwhile; ?>
+			<?php endfor; ?>			
+						
 		];
 
-		<?php $resultados = $db->query('SELECT * FROM resultados ORDER BY elementos ASC '); ?>
+		<?php $resultados = $db->query('SELECT * FROM resultados ORDER BY resultado_id '); ?>
 		
 		<?php while($row = $resultados->fetchArray()): ?>
 			var elementos = <?= $row['elementos']; ?>;			
@@ -60,7 +64,7 @@ require_once('connection.php');
 
 <div class='container' ng-controller='ResultsController'>
 	<span ng-repeat='chart in charts'>
-		<center><h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b></h3></center>
+		<center><h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b> - Resultado ID: {{chart.ResultadoID}}</h3></center>
 		<span class='row'><canvas id='{{chart.ID}}' width='500%' class='chart chart-bar' chart-data='chart.Data' chart-labels='chart.Labels'></canvas></span>	
 		<hr>
 	</span>
