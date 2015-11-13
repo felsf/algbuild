@@ -120,6 +120,36 @@
 			$scope.fields[$scope.fields.length-1].Value = "Processar "+button.Value;			
 		};		
 
+		$scope.testall = function(a) {
+			var quantidade = document.getElementById('input').value;						
+
+			if(quantidade < 2) 
+			{
+				alert("Insira ao menos 2 valores para serem gerados.");
+				return;
+			}
+			 
+			$.ajax({
+					type: "POST",
+					url: "php/"+$scope.buttons[a].Id,
+					data: {quant: quantidade, repeat: document.getElementById('repeat').checked, save: true},				
+					dataType: "html",
+					success: function(data) 
+					{
+						if(a < 4) {
+							setTimeout(function(){$scope.testall(a+1)}, 500);
+						}
+
+						$("#resposta").hide(1000, function() {
+							$(this).fadeIn(1000);
+						});	
+
+						$scope.resposta.title = "Resultados do procedimento (TESTE SIMULTANEO)";
+						$scope.resposta.text = "Procedimento encerrado. Clickar em 'Results!' para visualizar resultados.";
+					}
+			});	
+		};	
+
 		$scope.processar = function(element) 
 		{
 			if(element.Type != "button" && element.Type != "submit") return;
@@ -141,14 +171,13 @@
 					$("#resposta").hide(1000, function() {
 						$(this).fadeIn(1000);
 					});					
-
-					$("#submitButton").fadeIn(1000);
-
-					//console.log("Grafico: "+$scope.charts[$scope.getButtonValue()].ID);
+					
+					/** 
+					* Adicionando ao gráfico correspondente 
+					*/
 					var Chart = $scope.getButtonValue();
 					$scope.charts[Chart].Label.push($scope.charts[Chart].Label.length + 1);
 					$scope.charts[Chart].Data[0].push(data);
-
 
 					$scope.resposta.title = "Resultados do procedimento";
 					$scope.resposta.text = "Tempo de processamento: "+data+" ms.";
@@ -172,9 +201,8 @@
 	}
 	#btn-resultados:hover
 	{
-		background-color: orange;
-		border: none;
-		color: blue!important;
+		background-color: green;
+		border: none;		
 	}
 </style>
 
@@ -190,7 +218,8 @@
 			<input type='button' ng-click="select(button); " ng-model="button.Model" class={{button.Class}} value={{button.Value}}>		
 		</span><br><br>
 		<input type='button' id='btn-graphics' data-toggle="modal" data-target="#Modal0" class='btn btn-lg btn-warning' value='Graphics!'>
-		<a href='resultados.php'><button class='btn btn-lg btn-danger' type='button' id='btn-resultados'>Results!</button></a>
+		<a href='resultados.php'><button class='btn btn-lg btn-warning' type='button' id='btn-resultados'>Results!</button></a><br><br>
+		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testall(0)">TESTAR TODOS</button>
 	</center><hr>
 	<div ng-model='menu'>
 		<center><h2>{{menu.title}}</h2></center>

@@ -4,6 +4,8 @@
 	require_once("Gerador.php");
 	require_once('functions.php');
 
+	require_once('../connection.php');
+
 	function run(&$vector, $esquerda, $direita)
 	{  
 		$esq = $esquerda;  
@@ -34,13 +36,26 @@
 
 	$array = (new Gerador())->gerar($_POST['quant']);
 	$ini = microtime(true);
-	for($a = 0; $a < 1; $a++)
-	{
-		run($array, 0, count($array) - 1);
-	}
+	for($a = 0; $a < 1; $a++) run($array, 0, count($array) - 1);	
 
-	$fim = microtime(true) - $ini;
-	//printv($array);
-	//echo "<br>";
-	echo round($fim, 6);
-	//echo "Tempo de execução: ".count($array)." elementos | ".($fim*1000)."ms.";
+	$fim = microtime(true) - $ini;	
+	echo $fim;
+
+	if(isset($_POST['save']) && isset($db)) 
+	{
+		$alg_id = 1;
+
+		$quant = $_POST['quant'];	
+		$result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
+		
+		$id = $result->fetchArray()[0];	
+
+		if($id == null)  
+		{
+			$next_id = $db->query("SELECT MAX(resultado_id) FROM resultados")->fetchArray();
+			$id = ++$next_id[0];
+		} 	
+
+		$db->exec("INSERT INTO resultados VALUES ($id, $fim, $alg_id, 'PHP', $quant);");
+		$db->close();
+	}	

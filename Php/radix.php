@@ -1,62 +1,37 @@
 <?php
 
-/*
-    Radix Sort Algorithm
-*/
 namespace php;
 
-class Radix extends Algoritmo
-{
-    public function run($vector, $digitos = 2) // Informa o Vector e quantidade máxima de Digitos do número.
-    {
-        $bucket = array();
-        $unidades = array();
+require_once('Gerador.php');
+require_once('../connection.php');
 
-        $index = 0;
-        for($a = 0; $a < 11; $a++) array_push($bucket, array()); // Preenchendo array de 10 posições (0 a 9)
-        for($a = 0; $a < 11; $a++) array_push($unidades, array()); // Preenchendo array de UNIDADES de 10 posições (0 a 9)
-        for($a = 0; $a < $digitos; $a++)
-        {
-            for($c = 0; $c < count($bucket); $c++) { // Limpa o Bucket, é como se passasse p/ outras filas.
-                unset($bucket[$c]);
-                $bucket[$c] = array();
-            }
+function run($vector)
+{   
 
-            switch($index) {
-                    case 10: $formula = $vector[$b] % $index; break;
-                    case 100: $formula = intval(($vector[$b]%100)/10); break;
-                    default: $formula = intval($vector[$b]/$index); break;
-            }
-
-            if($index == 10) {
-
-            }
-
-            else 
-            {
-
-                for($b = 0; $b < count($vector); $b++)
-                {
-                   $index = pow(10, $a+1);
-                   $formula = 0;
-
-                   
-
-                   if($index >= 100 && $vector[$b] % $index == $vector[$b]) $formula = 0;           
-
-                   array_push($bucket[$formula], $vector[$b]);           
-                   echo "Elemento $vector[$b] added to position <b>".$formula."</b> (Index: $index)<br>";          
-                }       
-
-                foreach($bucket as $array) {
-                    if(count($array) > 0) printv($array); // Imprime todas as filas do Bucket que tiverem >= 1 elementos.
-                }                
-            }    
-
-            echo "<br>";   
-        }   
-    }
 }
 
-$radix = new Radix();
-printv($radix->run([246, 79, 284, 174, 245]));
+$testes = 1;
+$array = (new Gerador())->gerar($_POST['quant']);
+$ini = microtime(true);
+for($a = 0; $a < $testes; $a++) run($array);
+$fim = microtime(true) - $ini;
+$fim = 0.5;
+echo $fim;
+
+if(isset($_POST['save']) && isset($db)) {
+
+    $alg_id = 4;
+
+    $quant = $_POST['quant'];   
+    $result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");  
+    
+    $id = $result->fetchArray()[0]; 
+
+    if($id == null)  {
+        $next_id = $db->query("SELECT MAX(resultado_id) FROM resultados")->fetchArray();
+        $id = ++$next_id[0];
+    }   
+
+    $db->exec("INSERT INTO resultados VALUES ($id, $fim, $alg_id, 'PHP', $quant);");
+    $db->close();
+}

@@ -21,10 +21,7 @@ require_once('connection.php');
 <link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 <link rel="stylesheet" href="scripts/css/angular-chart.min.css">
 
-<script>
-	<?php 
-		require_once('connection.php'); 		
-	?>
+<script>	
 	
 	angular.module('Resultados', ['chart.js']).controller('ResultsController', function($scope) {
 			$scope.charts = [
@@ -37,7 +34,8 @@ require_once('connection.php');
 					Data: [ [0, 0, 0, 0, 0], ],
 					Labels: ['Shell Sort', 'Quick Sort', 'Merge Sort', 'Bin Sort', 'Radix Sort'],
 					Navegador: "<?= $row['navegador']; ?>",
-					Elementos: <?= $row['elementos']; ?>,	
+					Elementos: <?= $row['elementos']; ?>,
+					Info: "",	
 				},
 				<?php endwhile; ?>
 			<?php endfor; ?>			
@@ -46,16 +44,19 @@ require_once('connection.php');
 
 		<?php $resultados = $db->query('SELECT * FROM resultados ORDER BY resultado_id '); ?>
 		
-		<?php while($row = $resultados->fetchArray()): ?>
+		<?php for($b = 0; $row = $resultados->fetchArray(); $b++): ?>
 			var elementos = <?= $row['elementos']; ?>;			
 			for(var a = 0; a < $scope.charts.length; a++)
 			{
 				if($scope.charts[a].Elementos == elementos) {
 					$scope.charts[a].Data[0][<?= $row['algoritmo']; ?>] = <?= $row['time']; ?>;
-					console.log('Added '+<?= $row['time']; ?>);
+					<?php if($row['time'] <= 0.1): ?>
+						$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['time']; ?>+" ms. --- ");						
+					<?php endif; ?>
+					//console.log('Added '+<?= $row['time']; ?>);
 				}
 			}
-		<?php endwhile; ?>
+		<?php endfor; ?>
 
 	});
 </script>
@@ -66,6 +67,7 @@ require_once('connection.php');
 	<span ng-repeat='chart in charts'>
 		<center><h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b> - Resultado ID: {{chart.ResultadoID}}</h3></center>
 		<span class='row'><canvas id='{{chart.ID}}' width='500%' class='chart chart-bar' chart-data='chart.Data' chart-labels='chart.Labels'></canvas></span>	
+		<center><i>** {{chart.Info}}</i></center>
 		<hr>
 	</span>
 </div>
