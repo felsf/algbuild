@@ -8,10 +8,10 @@ Objetivo do trabalho: comparação de algorítmos de ordenação utilizando trê
 - Interfaces de desenvolvimento utilizadas: Eclipse (Java), Sublime Text 3 (PHP e Javascript)
 
 - Frameworks utilizados no desenvolvimento Web:
-  1) AngularJS
-  2) ChartJS
-  3) jQuery
-  4) Bootstrap
+  - AngularJS
+  - ChartJS
+  - jQuery
+  - Bootstrap
 
 - Banco de dados para armazenamento de resultados: Sqlite3.
 
