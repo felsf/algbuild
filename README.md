@@ -5,7 +5,9 @@ Projeto de Construção de Algorítmos - 4º semestre.
 Objetivo do trabalho: comparação de algorítmos de ordenação utilizando três linguagens de programação diferentes.
 
 - Linguagens a serem utilizadas: Java, PHP, Javascript
-- Interfaces de desenvolvimento utilizadas: Eclipse (Java), Sublime Text 3 (PHP e Javascript)
+- Interfaces de desenvolvimento utilizadas: 
+  - Eclipse (Java)
+  - Sublime Text 3 (PHP e Javascript)
 
 - Frameworks utilizados no desenvolvimento Web:
   - AngularJS
