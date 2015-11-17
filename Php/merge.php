@@ -43,13 +43,31 @@ function run(&$array, $inicio, $fim)
 }
 
 
-$testes = 1;
-$array = (new Gerador())->gerar($_POST['quant']);		
+	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 20));		
+	
+	$fim = 0;
 
-$ini = microtime(true);
-for($a = 0; $a < $testes; $a++) run($array, 0, count($array) - 1);
-$fim = microtime(true) - $ini;
-echo $fim;
+	if(isset($_POST['temporization']))
+    {
+        $ini = microtime(true);
+        run($array, 0, count($array) - 1);   
+        $fim = microtime(true) - $ini;  
+        echo $fim;
+    }
+    else if(isset($_POST['memory']))
+    {
+        $memini = memory_get_peak_usage();
+        run($array, 0, count($array) - 1);    
+        $fim = memory_get_peak_usage() - $memini;
+        echo $fim;
+    }
+    else if(isset($_POST['exchange']))
+    {
+    	$fim = run($array, 0, count($array) - 1);   
+    	echo $fim;
+	}
+
+	//printv($array);
 
 if(isset($_POST['save']) && isset($db))
 {
@@ -57,7 +75,8 @@ if(isset($_POST['save']) && isset($db))
 
 	$quant = $_POST['quant'];	
 	$result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
-	
+	$teste = ( (isset($_POST['temporization']) ? 'Temporization' : (isset($_POST['memory']) ? 'Memory' : (isset($_POST['exchange']) ? "Exchange" : ""))));
+
 	$id = $result->fetchArray()[0];	
 
 	if($id == null)  {
@@ -65,6 +84,7 @@ if(isset($_POST['save']) && isset($db))
 		$id = ++$next_id[0];
 	} 	
 
-	$db->exec("INSERT INTO resultados VALUES ($id, $fim, $alg_id, 'PHP', $quant);");
+	$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant);";
+	$db->exec($query);
 	$db->close();
 }

@@ -21,8 +21,7 @@ require_once('connection.php');
 <link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 <link rel="stylesheet" href="scripts/css/angular-chart.min.css">
 
-<script>	
-	
+<script>
 	angular.module('Resultados', ['chart.js']).controller('ResultsController', function($scope) {
 			$scope.charts = [
 			<?php for($a = 0; $a < intval($db->query('SELECT COUNT(*) from resultados')->fetchArray()); $a++): ?>
@@ -30,6 +29,8 @@ require_once('connection.php');
 				<?php while($row = $resultados->fetchArray()): ?>
 				{
 					ID: "<?= 'resultados'.$row['resultado_id']; ?>",
+					ResultadoID: <?= $row['resultado_id']; ?>,
+					Teste: "<?= $row['teste']; ?>",
 					ResultadoID: <?= $row['resultado_id']; ?>,
 					Data: [ [0, 0, 0, 0, 0], ],
 					Labels: ['Shell Sort', 'Quick Sort', 'Merge Sort', 'Bin Sort', 'Radix Sort'],
@@ -45,17 +46,17 @@ require_once('connection.php');
 		<?php $resultados = $db->query('SELECT * FROM resultados ORDER BY resultado_id '); ?>
 		
 		<?php for($b = 0; $row = $resultados->fetchArray(); $b++): ?>
-			var elementos = <?= $row['elementos']; ?>;			
+			var id = <?= $row['resultado_id']; ?>;				
+
 			for(var a = 0; a < $scope.charts.length; a++)
 			{
-				if($scope.charts[a].Elementos == elementos) {
-					$scope.charts[a].Data[0][<?= $row['algoritmo']; ?>] = <?= $row['time']; ?>;
-					<?php if($row['time'] <= 0.1): ?>
-						$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['time']; ?>+" ms. --- ");						
-					<?php endif; ?>
-					//console.log('Added '+<?= $row['time']; ?>);
+				if($scope.charts[a].ResultadoID == id) {
+					$scope.charts[a].Data[0][<?= $row['algoritmo']; ?>] = <?= $row['content']; ?>;					
+					$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['content']; ?>+ (($scope.charts[a].Teste == "Temporization") ?  " ms." : " trades.")+  " --- ");						
+					console.log($scope.charts[a].Info);
 				}
 			}
+
 		<?php endfor; ?>
 
 	});
@@ -63,9 +64,11 @@ require_once('connection.php');
 
 <body ng-app='Resultados'>
 
-<div class='container' ng-controller='ResultsController'>
+<div class='container' ng-controller='ResultsController'>	
 	<span ng-repeat='chart in charts'>
-		<center><h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b> - Resultado ID: {{chart.ResultadoID}}</h3></center>
+		<center>
+		<h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b> - Resultado ID: {{chart.ResultadoID}}<br><br>
+		Teste de <b>{{chart.Teste}}<b></h3></center>
 		<span class='row'><canvas id='{{chart.ID}}' width='500%' class='chart chart-bar' chart-data='chart.Data' chart-labels='chart.Labels'></canvas></span>	
 		<center><i>** {{chart.Info}}</i></center>
 		<hr>

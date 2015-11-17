@@ -9,6 +9,7 @@
 <script src="scripts/js/bootstrap.min.js"></script>
 <script src="scripts/js/Chart.min.js"></script>
 <script src="scripts/js/angular-chart.min.js"></script>
+<script src="js-algs.js"></script>
 
 <link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 <link rel="stylesheet" href="scripts/css/angular-chart.min.css">
@@ -120,7 +121,8 @@
 			$scope.fields[$scope.fields.length-1].Value = "Processar "+button.Value;			
 		};		
 
-		$scope.testall = function(a) {
+		$scope.testAllTemp = function(a) 
+		{
 			var quantidade = document.getElementById('input').value;						
 
 			if(quantidade < 2) 
@@ -132,23 +134,87 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {quant: quantidade, repeat: document.getElementById('repeat').checked, save: true},				
+					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
 						if(a < 4) {
-							setTimeout(function(){$scope.testall(a+1)}, 500);
-						}
+							setTimeout(function(){$scope.testAllTemp(a+1)}, 500);
+						} else {
+							alert("Teste de temporização finalizado!");
+							$("#resposta").hide(1000, function() {
+								$(this).fadeIn(1000);
+							});		
 
-						$("#resposta").hide(1000, function() {
-							$(this).fadeIn(1000);
-						});	
-
-						$scope.resposta.title = "Resultados do procedimento (TESTE SIMULTANEO)";
-						$scope.resposta.text = "Procedimento encerrado. Clickar em 'Results!' para visualizar resultados.";
+							$scope.resposta.title = "Resultados do procedimento (TESTE SIMULTANEO DE TEMPORIZAÇÃO)";
+							$scope.resposta.text = "Procedimento encerrado. Clickar em 'Results!' para visualizar resultados.";
+						}												
 					}
-			});	
-		};	
+			});
+		};
+
+		$scope.testAllMemory = function(a)
+		{
+			var quantidade = document.getElementById('input').value;						
+
+			if(quantidade < 2) 
+			{
+				alert("Insira ao menos 2 valores para serem gerados.");
+				return;
+			}
+			 
+			$.ajax({
+					type: "POST",
+					url: "php/"+$scope.buttons[a].Id,
+					data: {memory: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
+					dataType: "html",
+					success: function(data) 
+					{
+						if(a < 4) {
+							setTimeout(function(){$scope.testAllMemory(a+1)}, 500);
+						} else {
+							alert("Teste de memória finalizado!");
+							$("#resposta").hide(1000, function() {
+								$(this).fadeIn(1000);
+							});		
+
+							$scope.resposta.title = "Resultados do procedimento (TESTE SIMULTANEO DE MEMÓRIA)";
+							$scope.resposta.text = "Procedimento encerrado. Clickar em 'Results!' para visualizar resultados.";
+						}												
+					}
+			});
+		};
+
+		$scope.testAllExchange = function(a) {
+			var quantidade = document.getElementById('input').value;						
+
+			if(quantidade < 2) 
+			{
+				alert("Insira ao menos 2 valores para serem gerados.");
+				return;
+			}
+			 
+			$.ajax({
+					type: "POST",
+					url: "php/"+$scope.buttons[a].Id,
+					data: {exchange: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
+					dataType: "html",
+					success: function(data) 
+					{
+						if(a < 4) {
+							setTimeout(function(){$scope.testAllExchange(a+1)}, 500);
+						} else {
+							alert("Teste de trocas finalizado!");
+							$("#resposta").hide(1000, function() {
+								$(this).fadeIn(1000);
+							});		
+
+							$scope.resposta.title = "Resultados do procedimento (TESTE SIMULTANEO DE TROCAS)";
+							$scope.resposta.text = "Procedimento encerrado. Clickar em 'Results!' para visualizar resultados.";
+						}												
+					}
+			});
+		}
 
 		$scope.processar = function(element) 
 		{
@@ -164,7 +230,7 @@
 			$.ajax({
 				type: "POST",
 				url: "php/"+$scope.getActiveButton(),
-				data: {quant: quantidade, repeat: document.getElementById('repeat').checked},				
+				data: {quant: quantidade, repeat: document.getElementById('repeat').checked, temporization: true},				
 				dataType: "html",
 				success: function(data) 
 				{
@@ -180,7 +246,7 @@
 					$scope.charts[Chart].Data[0].push(data);
 
 					$scope.resposta.title = "Resultados do procedimento";
-					$scope.resposta.text = "Tempo de processamento: "+data+" ms.";
+					$scope.resposta.text = "Tempo de processamento: "+data+" seg.";
 				}
 			});			
 		}		
@@ -219,23 +285,41 @@
 		</span><br><br>
 		<input type='button' id='btn-graphics' data-toggle="modal" data-target="#Modal0" class='btn btn-lg btn-warning' value='Graphics!'>
 		<a href='resultados.php'><button class='btn btn-lg btn-warning' type='button' id='btn-resultados'>Results!</button></a><br><br>
-		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testall(0)">TESTAR TODOS</button>
+		<hr>
+		<center><h2><u>Testes Coletivos (PHP)</h2></u></center>
+		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllTemp(0)">TESTAR TODOS (temporization test)</button><br>
+		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllMemory(0)">TESTAR TODOS (memory test)</button><br>
+		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllExchange(0)">TESTAR TODOS (exchange count)</button>
 	</center><hr>
 	<div ng-model='menu'>
+		<center><h2><u>Teste Individual (PHP)</h2></u></center>
 		<center><h2>{{menu.title}}</h2></center>
 		<center><div class='container' ng-repeat="field in fields">
 			<div><label for="name">{{field.Label}}<input type={{field.Type}} id={{field.ID}} name={{field.Name}} class="{{field.Class}}" value="{{field.Value}}" ng-model="field.Model" ng-click="processar(field);" style='text-align: center;'></label></div><br>			
 		</div></center>		
 	</div><hr>
+
+	<!-- -------------------------------------------------------------------------------- -->
+	<center><h2><u>Testes em JS</h2></u></center>
+
+	<center>
+		<label for="elementosjs">Quantidade de elementos no Array<input type='number' name='elementosjs' id='elementosjs' style='text-align: center'></label><br><br>
+		<button class='btn btn-lg btn-success'>Testar Todos (TEMPORIZATION TEST)</button><br><br>
+		<button class='btn btn-lg btn-danger'>Testar Todos (MEMORY TEST)</button><br><br>
+		<button class='btn btn-lg btn-warning'>Testar Todos (EXCHANGE TEST)</button><br><br>
+	</center>
+
+	<!-- -------------------------------------------------------------------------------- -->	
+	<hr>
 	<center><div id='resposta'>
 		<h3>{{resposta.title}}</h3>
-		<div>{{resposta.text}}</div>
+		<div style='font-size: 18px'>{{resposta.text}}</div>
 	</div></center><hr>
 
 	<div ng-repeat="chart in charts">
 		<div class='modal fade' id="{{chart.ID}}">
 			<div class='modal-dialog'>
-				<div class='modal-content'>
+				<div class='modal-content'>					
 					<div class='modal-header' style='font-size: 20px'>Algoritmo de {{chart.Name}}</div>
 					<div class='modal-body'>
 						<canvas id="chart.ID" width="500%" class="chart chart-line" chart-data="chart.Data" chart-labels="chart.Label"></canvas>

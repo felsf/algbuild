@@ -1,5 +1,3 @@
-<script>
-
 	var vector = feed(10000);
 
 	// ------------------------------ //
@@ -40,11 +38,13 @@
 
 	function run() 
 	{
-		testShell(vector, 2);
-		testQuick(vector, 0, vector.length - 1);
+		
+		//testShell(vector, 2);
+		//testQuick(vector, 0, vector.length - 1);
 		//testMerge(vector, 0, vector.length - 1); -- > Erro de recursão 
-		testBin(vector);
-		testRadix(vector);
+		//testBin(vector);
+		//testRadix(vector);
+		<?php $db->close(); ?>
 	}
 
 	function testShell(array, gap) 
@@ -222,9 +222,3 @@
 	        exp *= 10;
 	    }
  	}
-
-</script>
-
-<body onLoad="run()">
-
-</body>

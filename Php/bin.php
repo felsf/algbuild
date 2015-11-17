@@ -13,18 +13,38 @@ function run($vector)
 	return $bucket; 	
 }
 
-$testes = 1;
-$array = (new Gerador())->gerar($_POST['quant']);
-$ini = microtime(true);
-for($a = 0; $a < $testes; $a++) run($array);
-$fim = microtime(true) - $ini;
-echo $fim;
+	$array = (new Gerador())->gerar($_POST['quant']);
+	$bucket = array();
+
+	if(isset($_POST['temporization']))
+    {
+        $ini = microtime(true);
+        $bucket = run($array);  
+        $fim = microtime(true) - $ini;  
+        echo $fim;
+    }
+    else if(isset($_POST['memory']))
+    {
+        $memini = memory_get_peak_usage();
+        $bucket = run($array);    
+        $fim= memory_get_peak_usage() - $memini;
+        echo $fim;
+    }
+    else if(isset($_POST['exchange']))
+    {
+    	$fim = -1;
+    	echo $fim;
+    }
+
+    //printv($bucket);
+
 
 if(isset($_POST['save']) && isset($db)) {
 
 	$alg_id = 3;
 
-	$quant = $_POST['quant'];	
+	$quant = $_POST['quant'];
+	$teste = ( (isset($_POST['temporization']) ? 'Temporization' : (isset($_POST['memory']) ? 'Memory' : (isset($_POST['exchange']) ? "Exchange" : ""))));
 	$result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
 	
 	$id = $result->fetchArray()[0];	
@@ -34,6 +54,7 @@ if(isset($_POST['save']) && isset($db)) {
 		$id = ++$next_id[0];
 	} 	
 
-	$db->exec("INSERT INTO resultados VALUES ($id, $fim, $alg_id, 'PHP', $quant);");
+	$query = "INSERT INTO resultados VALUES ($id,  '$teste', $fim, $alg_id, 'PHP', $quant);";
+	$db->exec($query);
 	$db->close();
 }

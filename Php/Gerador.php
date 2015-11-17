@@ -12,7 +12,7 @@ class Gerador
 		$Array = array();
 		for($a = 0; $a < $quant;) 
 		{
-			$valor = rand(0, $quant * 10);			
+			$valor = rand(0, $quant * 3);			
 			if(!$repeat && in_array($valor, $Array)) continue;
 			array_push($Array, $valor); 
 			++$a;							

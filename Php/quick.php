@@ -6,7 +6,7 @@
 
 	require_once('../connection.php');
 
-	function run(&$vector, $esquerda, $direita)
+	function run(&$vector, $esquerda, $direita, &$trocas = 0)
 	{  
 		$esq = $esquerda;  
 	    $dir = $direita;  
@@ -30,25 +30,48 @@
 	        }  	               
 	    }
 	    
-	    if ($dir > $esquerda) run($vector, $esquerda, $dir);  
-	    if ($esq < $direita)  run($vector, $esq, $direita);     
+	    if ($dir > $esquerda) run($vector, $esquerda, $dir, $numTroca);  
+	    if ($esq < $direita)  run($vector, $esq, $direita, $numTroca);
+
+	    return $trocas;     
 	}
 
-	$array = (new Gerador())->gerar($_POST['quant']);
-	$ini = microtime(true);
-	for($a = 0; $a < 1; $a++) run($array, 0, count($array) - 1);	
+	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 100000));
+	$fim = 0;
 
-	$fim = microtime(true) - $ini;	
-	echo $fim;
+	if(isset($_POST['temporization']))
+	{
+		$ini = microtime(true);
+		for($a = 0; $a < 1; $a++) run($array, 0, count($array) - 1);	
+		$fim = microtime(true) - $ini;	
+		echo $fim;
+	}
+	else if(isset($_POST['memory']))
+	{
+		$memini = memory_get_peak_usage();
+		for($a = 0; $a < 1; $a++) run($array, 0, count($array) - 1);	
+		$fim = memory_get_peak_usage() - $memini;
+		echo $fim;
+	}
+	else if(isset($_POST['exchange']))
+    {
+    	$fim = run($array, 0, count($array) - 1);   
+    	echo $fim;
+    }
+
+    //printv($array);
+
+	// --------------------------------------------------------------------- //
 
 	if(isset($_POST['save']) && isset($db)) 
 	{
-		$alg_id = 1;
+		$alg_id = 1;		
 
 		$quant = $_POST['quant'];	
 		$result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
 		
 		$id = $result->fetchArray()[0];	
+		$teste = ( (isset($_POST['temporization']) ? 'Temporization' : (isset($_POST['memory']) ? 'Memory' : (isset($_POST['exchange']) ? "Exchange" : ""))));
 
 		if($id == null)  
 		{
@@ -56,6 +79,8 @@
 			$id = ++$next_id[0];
 		} 	
 
-		$db->exec("INSERT INTO resultados VALUES ($id, $fim, $alg_id, 'PHP', $quant);");
+		$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant);";
+		$db->exec($query);
+		
 		$db->close();
 	}	
