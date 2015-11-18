@@ -1,4 +1,4 @@
-	var vector = feed(10000);
+	var vector = null;
 
 	// ------------------------------ //
 
@@ -8,6 +8,16 @@
 
 	Array.prototype.max = function(array) {
 		return Math.max.apply(null, array);
+	}
+
+	function getMax(array) {
+		var maior = array[0];
+		for(var a = 0; a < array.length; a++) {
+			if(array[a] > maior) 
+				maior = array;
+		}
+
+		return maior;
 	}
 
 	function printv(vector) 
@@ -29,71 +39,106 @@
 
 		for(var a = 0; a < quant;)
 		{
-			var valor = (Math.floor((Math.random() * (quant))) + 10);
+			var valor = (Math.floor((Math.random() * (quant))) + 1);
 			array[a++] = valor;			
 		}		
 
 		return array;
 	}
 
-	function run() 
+	function testAll(index, test) 
 	{
+		if(document.getElementById('elementosjs').value < 2) return alert("Insira ao menos 2 elementos para iniciar!");
+		if(index == 0) {
+			vector = feed(document.getElementById('elementosjs').value);
+			console.log("\n");
+		}
 		
-		//testShell(vector, 2);
-		//testQuick(vector, 0, vector.length - 1);
-		//testMerge(vector, 0, vector.length - 1); -- > Erro de recursão 
-		//testBin(vector);
-		//testRadix(vector);
-		<?php $db->close(); ?>
-	}
-
-	function testShell(array, gap) 
-	{
-		var start = new Date();
-		shell(array, gap);
-		var end = new Date() - start;
-		console.log(end+"ms.");
-	}
-
-	function shell(array, gap) 
-	{
-		var current = (array.length / gap);
-
-		while(current > 0)
+		if(index < 5)
 		{
-			for(var a = 0; (current + a) < array.length; a++)
+			switch(index)
 			{
-				if(array[a] > array[current + a]) {
-					var aux = array[a];
-					array[a] = array[current + a];
-					array[current + a] = aux;
-				}
+				case 0: testShell(vector, test); break;
+				case 1: testQuick(vector, 0, vector.length - 1, test); break;
+				case 2: break;//testMerge(vector, 0, vector.length - 1, test); break;
+				case 3: testBin(vector, test); break;
+				case 4: testRadix(vector, test); break;
 			}
 
-			current /= gap;			
+			testAll(index+1, test);
+		}
+	}
+
+	function testShell(array, test) 
+	{
+		var start = null;
+		var end = null;
+
+		if(test == 0)
+		{
+			start = new Date();
+			shell(array);
+			end = new Date() - start; 
+		}
+		else
+		{
+
 		}
 
-		current = 0;
 		
-		for(var a = 0; a < array.length; a++, current++)
-		{
-			for(var b = current; b > 0; b--)
-			{
-				if(array[b-1] > array[b]) {
-					var aux = array[b];
-					array[b] = array[b-1];
-					array[b-1] = aux;
-				}
-			}
-		}		
+		console.log(end+"ms.");
+		return end;		
 	}
 
-	function testQuick(vector, esquerda, direita)
+	function shell(array) 
 	{
-		var start = new Date(); 
-		quick(vector, esquerda, direita);
-		var end = new Date() - start;
+		var h = 1;
+		var n = array.length
+		var numTroca=0;
+		
+		while(h < n) h = (h * 3) + 1;
+		
+		h = Math.floor(h / 3);		
+		var c = 0; 
+		var j = 0;
+
+		while (h > 0) 
+		{	
+			for (var i = h; i < n; i++) 
+			{
+	            c = array[i];
+	            j = i;
+	            while (j >= h && array[j - h] > c) 
+	            {
+	                array[j] = array[j - h];
+	                j = j - h;
+	                numTroca++;
+	            }
+	            array[j] = c;
+	        }
+
+	        h = Math.floor(h / 2);	    
+	    }    
+	}	
+
+	function testQuick(vector, esquerda, direita, test)
+	{
+		var start = null;
+		var end = null;
+
+		if(test == 0)
+		{
+			start = new Date();
+			quick(vector, esquerda, direita);
+			end = new Date() - start; 
+		}
+		else
+		{
+
+		}		
+		
 		console.log(end+"ms."); 
+		return end;
 	}
 
 	function quick(vector, esquerda, direita)
@@ -124,12 +169,24 @@
 	    return vector;	    
 	}
 
-	function testMerge(array, inicio, fim) 
+	function testMerge(array, inicio, fim, test) 
 	{
-		var start = new Date(); 
-		merge(array, inicio, fim);
-		var end = new Date() - start;
+		var start = null;
+		var end = null;
+
+		if(test == 0)
+		{
+			start = new Date();
+			merge(array, inicio, fim);
+			end = new Date() - start; 
+		}
+		else
+		{
+
+		}
+		
 		console.log(end+"ms."); 
+		return end;
 	}
 
 	function merge(array, inicio, fim) 
@@ -166,12 +223,25 @@
 		return numTroca;		
 	}
 
-	function testBin(vector)
+	function testBin(vector, test)
 	{
-		var start = new Date(); 
-		bin(vector);
-		var end = new Date() - start;
+		var start = null;
+		var end = null;
+
+		if(test == 0)
+		{
+			start = new Date();
+			bin(vector);
+			end = new Date() - start; 
+		}
+		else
+		{
+
+		}
+
+		
 		console.log(end+"ms.");
+		return end;
 	}
 
 	function bin(vector)
@@ -184,14 +254,23 @@
 		return bucket;
 	}
 
-	function testRadix(vector)
+	function testRadix(vector, test)
 	{
-		printv(vector);
-		var start = new Date(); 
-		radix(vector);
-		var end = new Date() - start;
+		var start = null;
+		var end = null;
+
+		if(test == 0)
+		{
+			start = new Date();
+			radix(vector);
+			end = new Date() - start; 
+		}
+		else
+		{
+
+		}
 		console.log(end+"ms.");
-		printv(vector);
+		return end;
 	}
 
 	function radix(vector) 

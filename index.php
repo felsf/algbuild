@@ -9,7 +9,6 @@
 <script src="scripts/js/bootstrap.min.js"></script>
 <script src="scripts/js/Chart.min.js"></script>
 <script src="scripts/js/angular-chart.min.js"></script>
-<script src="js-algs.js"></script>
 
 <link rel="stylesheet" href="scripts/css/bootstrap.min.css">
 <link rel="stylesheet" href="scripts/css/angular-chart.min.css">
@@ -304,10 +303,10 @@
 	<center><h2><u>Testes em JS</h2></u></center>
 
 	<center>
+		<label for="navegador">Navegador<input type='text' name='navegador' id='navegador' style='text-align: center'></label><br>
 		<label for="elementosjs">Quantidade de elementos no Array<input type='number' name='elementosjs' id='elementosjs' style='text-align: center'></label><br><br>
-		<button class='btn btn-lg btn-success'>Testar Todos (TEMPORIZATION TEST)</button><br><br>
-		<button class='btn btn-lg btn-danger'>Testar Todos (MEMORY TEST)</button><br><br>
-		<button class='btn btn-lg btn-warning'>Testar Todos (EXCHANGE TEST)</button><br><br>
+		<button class='btn btn-lg btn-success' onClick="testAll(0,0)">Testar Todos (TEMPORIZATION TEST)</button><br><br>
+		<button class='btn btn-lg btn-danger' onclick='testAll(0, 1)'>Testar Todos (MEMORY TEST)</button><br><br>		
 	</center>
 
 	<!-- -------------------------------------------------------------------------------- -->	
@@ -338,4 +337,5 @@
 	<button ng-click="d[0].push(inputer); l.push(l[l.length-1]+1)">Added</button> -->
 </div>
 
+<script src="js-algs.js"></script>
 </body>

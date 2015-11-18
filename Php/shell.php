@@ -33,7 +33,7 @@ function run($nums)
 	    $h = $h / 2;
 	    $h = intval($h);
 	}
-	    return $numTroca;
+	return $numTroca;
 }
 	
 	$fim = 0;
