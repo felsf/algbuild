@@ -43,6 +43,9 @@ function run(&$vector) {
 
 
 $array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10000));
+if(isset($_POST['alreadyInverted']) && $_POST['alreadyInverted']) {
+        rsort($array);
+    }
 $fim = 0;
 
     if(isset($_POST['temporization']))

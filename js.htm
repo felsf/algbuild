@@ -1,6 +1,6 @@
 <script>
 
-	var vector = feed(10000);
+	var vector = feed(10);
 
 	// ------------------------------ //
 
@@ -40,11 +40,11 @@
 
 	function run() 
 	{
-		testShell(vector, 2);
-		testQuick(vector, 0, vector.length - 1);
-		//testMerge(vector, 0, vector.length - 1); -- > Erro de recursão 
-		testBin(vector);
-		testRadix(vector);
+		//testShell(vector, 2);
+		//testQuick(vector, 0, vector.length - 1);
+		testMerge(vector, 0, vector.length - 1); 
+		//testBin(vector);
+		//testRadix(vector);
 	}
 
 	function testShell(array, gap) 
@@ -132,26 +132,30 @@
 		console.log(end+"ms."); 
 	}
 
-	function merge(array, inicio, fim) 
+	function merge(vector, inicio, fim) 
 	{
 		if (fim < inicio) return;
 
-		numTroca=0;
-		meio = Math.round((inicio + fim) / 2);	
+		var numTroca= 0;
+		var meio = Math.floor((inicio + fim) / 2);	
 		
-		merge(array, inicio, meio);
-		merge(array, meio + 1, fim);
-		
-		A = new Array(meio - inicio + 1); for(a = 0; a < meio - inicio + 1; a++) { A[a] = a; }
-		B = new Array(fim - meio); for(a = 0; a < fim - meio; a++) { B[a]  = a;}
-			
-		for (i = 0; i <= meio - inicio; i++) A[i] = array[inicio + i];
-		for (i = 0; i <= fim - meio - 1; i++) B[i] = array[meio + 1 + i];
-		
-		i = 0;
-		j = 0;
+		console.log("Array: "+vector);
+		console.log("Inicio: "+inicio);
+		console.log("Fim: "+fim);
 
-		for (k = inicio; k <= fim; k++) 
+		merge(vector, inicio, meio);
+		merge(vector, meio + 1, fim);
+		
+		A = new Array(meio - inicio + 1); for(var a = 0; a < meio - inicio + 1; a++) { A[a] = a; }
+		B = new Array(fim - meio); for(var a = 0; a < fim - meio; a++) { B[a]  = a;}
+			
+		for (var i = 0; i <= meio - inicio; i++) A[i] = array[inicio + i];
+		for (var i = 0; i <= fim - meio - 1; i++) B[i] = array[meio + 1 + i];
+		
+		var i = 0;
+		var j = 0;
+
+		for (var k = inicio; k <= fim; k++) 
 		{
 			if (i < A.length && j < B.length) 
 			{

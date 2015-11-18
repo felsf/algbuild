@@ -13,7 +13,12 @@ function run($vector)
 	return $bucket; 	
 }
 
-	$array = (new Gerador())->gerar($_POST['quant']);
+	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10));
+	
+	if(isset($_POST['alreadyInverted']) && $_POST['alreadyInverted']) {
+		rsort($array);
+	}
+
 	$bucket = array();
 
 	if(isset($_POST['temporization']))

@@ -80,6 +80,7 @@
 		$scope.fields = [
 			{ID: "input", Model: "input", Name: "", Type: 'number', Class: "", Value: "", Label: "Quantidade de elementos no Array", Click: ""},			
 			{ID: "repeat", Model: "repeat", Name: "repeat", Type: 'checkbox', Class: '', Value: "", Label: "Repetir números?", Click: ""},
+			{ID: "alreadyInverted", Model: "alreadyInverted", Name: "alreadyInverted", Type: 'checkbox', Class: '', Value: "", Label: "Gerar Array invertido?", Click: ""},
 			{ID: "decreased", Model: "decreased", Name: "decreased", Type: 'checkbox', Class: '', Value: "", Label: "Ordenar Decrementalmente?", Click: ""},
 			{ID: "submitButton", Model: "submit", Name: "post", Type: 'button', Class: 'btn btn-lg btn-success', Value: "-", Label: "", Click: "disable()"}
 		];		
@@ -134,7 +135,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
+					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
@@ -166,7 +167,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {memory: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
+					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
@@ -197,7 +198,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {exchange: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, save: true},				
+					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},
 					dataType: "html",
 					success: function(data) 
 					{

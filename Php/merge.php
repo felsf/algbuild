@@ -23,7 +23,6 @@ function run(&$array, $inicio, $fim)
 	for ($i = 0; $i <= $meio - $inicio; $i++) $A[$i] = $array[$inicio + $i];
 	for ($i = 0; $i <= $fim - $meio - 1; $i++) $B[$i] = $array[$meio + 1 + $i];
 	
-
 	$i = 0;
 	$j = 0;
 
@@ -44,7 +43,9 @@ function run(&$array, $inicio, $fim)
 
 
 	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 20));		
-	
+	if(isset($_POST['alreadyInverted']) && $_POST['alreadyInverted']) {
+		rsort($array);
+	}
 	$fim = 0;
 
 	if(isset($_POST['temporization']))

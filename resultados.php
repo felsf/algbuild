@@ -52,7 +52,7 @@ require_once('connection.php');
 			{
 				if($scope.charts[a].ResultadoID == id) {
 					$scope.charts[a].Data[0][<?= $row['algoritmo']; ?>] = <?= $row['content']; ?>;					
-					$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['content']; ?>+ (($scope.charts[a].Teste == "Temporization") ?  " ms." : " trades.")+  " --- ");						
+					$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['content']; ?>+ (($scope.charts[a].Teste == "Temporization") ?  " ms." : (($scope.charts[a].Teste == "Exchange") ? " trades." : " MBs"))+  " --- ");						
 					console.log($scope.charts[a].Info);
 				}
 			}

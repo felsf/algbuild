@@ -36,7 +36,17 @@
 	    return $trocas;     
 	}
 
-	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 100000));
+	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10));
+	if(isset($_POST['alreadyInverted']) && $_POST['alreadyInverted']) {
+		rsort($array);
+	}
+
+	rsort($array);
+	printv($array);
+	echo "<br>";
+	run($array, 0, count($array) - 1);
+	printv($array);
+
 	$fim = 0;
 
 	if(isset($_POST['temporization']))
