@@ -33,24 +33,24 @@
 		return vs;
 	}
 
-	function feed(quant) 
+	function feed(quant, invert) 
 	{
-		var array = new Array(quant);		
+		var array = [];
 
-		for(var a = 0; a < quant;)
+		for(var a = 0; a < quant; a++)
 		{
 			var valor = (Math.floor((Math.random() * (quant))) + 1);
-			array[a++] = valor;			
+			array.push(valor);			
 		}		
 
-		return array;
+		return (invert) ? array.reverse() : array;
 	}
 
 	function testAll(index, test) 
 	{
 		if(document.getElementById('elementosjs').value < 2) return alert("Insira ao menos 2 elementos para iniciar!");
 		if(index == 0) {
-			vector = feed(document.getElementById('elementosjs').value);
+			vector = feed(document.getElementById('elementosjs').value, document.getElementById('invertjs').checked);
 			console.log("\n");
 		}
 		
@@ -60,12 +60,14 @@
 			{
 				case 0: testShell(vector, test); break;
 				case 1: testQuick(vector, 0, vector.length - 1, test); break;
-				case 2: break;//testMerge(vector, 0, vector.length - 1, test); break;
+				case 2: testMerge(vector, test); break;
 				case 3: testBin(vector, test); break;
 				case 4: testRadix(vector, test); break;
 			}
 
-			testAll(index+1, test);
+			setTimeout(function(){testAll(index+1, test)}, 500);
+		} else {
+			alert("Teste finalizado");
 		}
 	}
 
@@ -73,6 +75,8 @@
 	{
 		var start = null;
 		var end = null;
+
+		var teste = (test == 0) ? "Temporization" : "Memory";
 
 		if(test == 0)
 		{
@@ -85,7 +89,16 @@
 
 		}
 
-		
+		$.ajax ({
+			type: "POST",
+			url: "save.php",
+			data: {content: end, alg: 0,  temporization: true, navegador: document.getElementById('navegador').value, elementos: document.getElementById('elementosjs').value},
+			dataType: "Html",
+			success: function(data) {
+				
+			}
+		});
+
 		console.log(end+"ms.");
 		return end;		
 	}
@@ -126,6 +139,8 @@
 		var start = null;
 		var end = null;
 
+		var teste = (test == 0) ? "Temporization" : "Memory";
+
 		if(test == 0)
 		{
 			start = new Date();
@@ -135,7 +150,17 @@
 		else
 		{
 
-		}		
+		}
+
+		$.ajax ({
+			type: "POST",
+			url: "save.php",
+			data: {content: end, alg: 1,  temporization: true, navegador: document.getElementById('navegador').value, elementos: document.getElementById('elementosjs').value},
+			dataType: "Html",
+			success: function(data) {
+				
+			}
+		});		
 		
 		console.log(end+"ms."); 
 		return end;
@@ -169,65 +194,93 @@
 	    return vector;	    
 	}
 
-	function testMerge(array, inicio, fim, test) 
+	function testMerge(array, test) 
 	{
 		var start = null;
 		var end = null;
 
+		var teste = (test == 0) ? "Temporization" : "Memory";
+
 		if(test == 0)
 		{
 			start = new Date();
-			merge(array, inicio, fim);
+			(ordenar(array));
 			end = new Date() - start; 
 		}
 		else
 		{
 
 		}
+
+		$.ajax ({
+			type: "POST",
+			url: "save.php",
+			data: {content: end, alg: 2,  temporization: true, navegador: document.getElementById('navegador').value, elementos: document.getElementById('elementosjs').value},
+			dataType: "Html",
+			success: function(data) {
+				
+			}
+		});
 		
-		console.log(end+"ms."); 
+		console.log(end+"ms.");		
 		return end;
 	}
 
-	function merge(array, inicio, fim) 
+	function ordenar(array) 
 	{
-		if (fim < inicio) return;
+	    var length = array.length,
+	    mid    = Math.floor(length * 0.5),
+	    left   = array.slice(0, mid),
+	    right  = array.slice(mid, length);
 
-		numTroca=0;
-		meio = Math.round((inicio + fim) / 2);	
-		
-		merge(array, inicio, meio);
-		merge(array, meio + 1, fim);
-		
-		A = new Array(meio - inicio + 1); for(a = 0; a < meio - inicio + 1; a++) { A[a] = a; }
-		B = new Array(fim - meio); for(a = 0; a < fim - meio; a++) { B[a]  = a;}
-			
-		for (i = 0; i <= meio - inicio; i++) A[i] = array[inicio + i];
-		for (i = 0; i <= fim - meio - 1; i++) B[i] = array[meio + 1 + i];
-		
-		i = 0;
-		j = 0;
+    	if(length === 1) {
+      		return array;
+    	}
 
-		for (k = inicio; k <= fim; k++) 
-		{
-			if (i < A.length && j < B.length) 
-			{
-				if (A[i] < B[j]) array[k] = A[i++];
-				else array[k] = B[j++];
-				numTroca++;
-			}
-			else if (i < A.length) array[k] = A[i++];
-			else if (j < B.length) array[k] = B[j++];	
-		}
+    	return merge(ordenar(left), ordenar(right));
+ 	}
 
-		return numTroca;		
-	}
+	function merge(left, right) 
+	{
+		var result = [];
+
+    	while(left.length || right.length) 
+    	{
+    		if(left.length && right.length) 
+    		{
+	        	if(left[0] < right[0]) 
+	        	{
+	          		result.push(left.shift());
+    	    	} 
+        		else 
+        		{
+          			result.push(right.shift());
+        		}
+
+      		} 
+      		else if (left.length) 
+      		{
+        		result.push(left.shift());
+      		} 
+      		else 	
+      		{
+        		result.push(right.shift());
+      		}
+    	}
+
+
+
+    	return result;
+ 	} 
+	
 
 	function testBin(vector, test)
 	{
 		var start = null;
 		var end = null;
 
+		var teste = (test == 0) ? "Temporization" : "Memory";
+		
 		if(test == 0)
 		{
 			start = new Date();
@@ -239,6 +292,16 @@
 
 		}
 
+		$.ajax ({
+			type: "POST",
+			url: "save.php",
+			data: {content: end, alg: 3,  temporization: true, navegador: document.getElementById('navegador').value, elementos: document.getElementById('elementosjs').value},
+			dataType: "Html",
+			success: function(data) {
+				
+			}
+		});
+
 		
 		console.log(end+"ms.");
 		return end;
@@ -246,10 +309,10 @@
 
 	function bin(vector)
 	{	
-		var bucket = new Array(Math.max.apply(null, vector)+1);
+		var bucket = [];
 		var vs = "";
 
-		for(var a = 0; a < bucket.length; a++) bucket[a] = 0;
+		for(var a = 0; a < Math.max.apply(null, vector)+1; a++) bucket.push(0);
 		for(var a = 0; a < vector.length; a++)  bucket[vector[a]]++;	
 		return bucket;
 	}
@@ -258,6 +321,7 @@
 	{
 		var start = null;
 		var end = null;
+		var teste = (test == 0) ? "Temporization" : "Memory";
 
 		if(test == 0)
 		{
@@ -269,6 +333,17 @@
 		{
 
 		}
+
+		$.ajax ({
+			type: "POST",
+			url: "save.php",
+			data: {content: end, temporization: true, alg: 4, navegador: document.getElementById('navegador').value, elementos: document.getElementById('elementosjs').value},
+			dataType: "Html",
+			success: function(data) {
+				
+			}
+		});
+
 		console.log(end+"ms.");
 		return end;
 	}

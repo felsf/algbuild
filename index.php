@@ -307,6 +307,7 @@
 		<label for="elementosjs">Quantidade de elementos no Array<input type='number' name='elementosjs' id='elementosjs' style='text-align: center'></label><br><br>
 		<button class='btn btn-lg btn-success' onClick="testAll(0,0)">Testar Todos (TEMPORIZATION TEST)</button><br><br>
 		<button class='btn btn-lg btn-danger' onclick='testAll(0, 1)'>Testar Todos (MEMORY TEST)</button><br><br>		
+		<label for="invertjs">Inverter Array?<input type='checkbox' name='invertjs' id='invertjs'></label>
 	</center>
 
 	<!-- -------------------------------------------------------------------------------- -->	
