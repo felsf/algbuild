@@ -17,6 +17,8 @@ $elementos = $_POST['elementos'];
 
 $teste = ( (isset($_POST['temporization']) ? 'Temporization' : (isset($_POST['memory']) ? 'Memory' : (isset($_POST['exchange']) ? "Exchange" : ""))));
 
+$obs = ((isset($_POST['obs']) ? $_POST['obs'] : ""));
+
 $result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
 $id = $result->fetchArray()[0];
 
@@ -28,7 +30,7 @@ if($id == null)
 
 echo "ID: $id";
 
-$query = "INSERT INTO resultados VALUES($id, '$teste', $content, $algoritmo, '$navegador', $elementos);";
+$query = "INSERT INTO resultados VALUES($id, '$teste', $content, $algoritmo, '$navegador', $elementos, '$obs');";
 $db->query($query);
 $db->close();
 //$query = save($result->fetchArray()[0], $teste, $_POST['content'], $_POST['alg'], $_POST['navegador'], $_POST['elementos']);

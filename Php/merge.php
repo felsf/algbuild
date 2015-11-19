@@ -83,9 +83,15 @@ if(isset($_POST['save']) && isset($db))
 	if($id == null)  {
 		$next_id = $db->query("SELECT MAX(resultado_id) FROM resultados")->fetchArray();
 		$id = ++$next_id[0];
-	} 	
+	} 
 
-	$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant);";
+	$obs = "";
+    if(isset($_POST['obs']))
+    {
+        $obs = $_POST['obs'];
+    }	
+
+	$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant, '$obs');";
 	$db->exec($query);
 	$db->close();
 }

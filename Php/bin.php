@@ -6,26 +6,30 @@ require_once('Gerador.php');
 require_once('../connection.php');
 
 function run($vector)
-{	
+{
 	$bucket = array();
 	for($a = 0; $a < max($vector)+1; $a++) array_push($bucket, 0);
 	for($a = 0; $a < count($vector); $a++)  $bucket[$vector[$a]]++;	
-	return $bucket; 	
+	return $bucket; 
 }
 
-	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10));
-	
+	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10));		
+	$obs = "";
+
 	if(isset($_POST['alreadyInverted']) && $_POST['alreadyInverted']) {
 		rsort($array);
 	}
 
-	$bucket = array();
+	if(isset($_POST['obs']))
+	{
+		$obs = $_POST['obs'];
+	}	
 
 	if(isset($_POST['temporization']))
     {
         $ini = microtime(true);
-        $bucket = run($array);  
-        $fim = microtime(true) - $ini;  
+        run($array);  
+        $fim = microtime(true) - $ini;         
         echo $fim;
     }
     else if(isset($_POST['memory']))
@@ -40,9 +44,6 @@ function run($vector)
     	$fim = -1;
     	echo $fim;
     }
-
-    //printv($bucket);
-
 
 if(isset($_POST['save']) && isset($db)) {
 
@@ -59,7 +60,7 @@ if(isset($_POST['save']) && isset($db)) {
 		$id = ++$next_id[0];
 	} 	
 
-	$query = "INSERT INTO resultados VALUES ($id,  '$teste', $fim, $alg_id, 'PHP', $quant);";
+	$query = "INSERT INTO resultados VALUES ($id,  '$teste', $fim, $alg_id, 'PHP', $quant, '$obs');";
 	$db->exec($query);
 	$db->close();
 }

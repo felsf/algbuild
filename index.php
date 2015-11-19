@@ -134,7 +134,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
+					data: {temporization: true, obs: document.getElementById('obs').value, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
@@ -166,7 +166,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
+					data: {memory: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
@@ -197,7 +197,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {temporization: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},
+					data: {exchange: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},
 					dataType: "html",
 					success: function(data) 
 					{
@@ -289,7 +289,8 @@
 		<center><h2><u>Testes Coletivos (PHP)</h2></u></center>
 		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllTemp(0)">TESTAR TODOS (temporization test)</button><br>
 		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllMemory(0)">TESTAR TODOS (memory test)</button><br>
-		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllExchange(0)">TESTAR TODOS (exchange count)</button>
+		<button class='btn btn-lg btn-info' style='background-color: green' ng-click="testAllExchange(0)">TESTAR TODOS (exchange count)</button><br><br>
+		<label for="obs">Observação:<input type='text' name="obs" id="obs"></label>
 	</center><hr>
 	<div ng-model='menu'>
 		<center><h2><u>Teste Individual (PHP)</h2></u></center>

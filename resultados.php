@@ -25,7 +25,7 @@ require_once('connection.php');
 	angular.module('Resultados', ['chart.js']).controller('ResultsController', function($scope) {
 			$scope.charts = [
 			<?php for($a = 0; $a < intval($db->query('SELECT COUNT(*) from resultados')->fetchArray()); $a++): ?>
-				<?php $resultados = $db->query('SELECT * FROM resultados GROUP BY resultado_id'); ?>
+				<?php $resultados = $db->query('SELECT * FROM resultados GROUP BY resultado_id ORDER BY teste ASC'); ?>
 				<?php while($row = $resultados->fetchArray()): ?>
 				{
 					ID: "<?= 'resultados'.$row['resultado_id']; ?>",
@@ -36,7 +36,8 @@ require_once('connection.php');
 					Labels: ['Shell Sort', 'Quick Sort', 'Merge Sort', 'Bin Sort', 'Radix Sort'],
 					Navegador: "<?= $row['navegador']; ?>",
 					Elementos: <?= $row['elementos']; ?>,
-					Info: "",	
+					Info: "",
+					Obs: "<?= $row['obs']; ?>",	
 				},
 				<?php endwhile; ?>
 			<?php endfor; ?>			
@@ -44,7 +45,7 @@ require_once('connection.php');
 		];
 
 		<?php $resultados = $db->query('SELECT * FROM resultados ORDER BY resultado_id '); ?>
-		
+		<?php $current = 0; ?>
 		<?php for($b = 0; $row = $resultados->fetchArray(); $b++): ?>
 			var id = <?= $row['resultado_id']; ?>;				
 
@@ -52,8 +53,7 @@ require_once('connection.php');
 			{
 				if($scope.charts[a].ResultadoID == id) {
 					$scope.charts[a].Data[0][<?= $row['algoritmo']; ?>] = <?= $row['content']; ?>;					
-					$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+<?= $row['content']; ?>+ (($scope.charts[a].Teste == "Temporization") ?  " ms." : (($scope.charts[a].Teste == "Exchange") ? " trades." : " MBs"))+  " --- ");						
-					console.log($scope.charts[a].Info);
+					$scope.charts[a].Info += ($scope.charts[a].Labels[<?= $b % 5; ?>]+": "+(($scope.charts[a].Teste == "Memory" && $scope.charts[a].Navegador != "Java - Windows" && $scope.charts[a].Navegador != "Java - Linux") ? (<?= $row['content']; ?>/(1024*1024)) : (<?= $row['content']; ?>))+ (($scope.charts[a].Teste == "Temporization") ?  " ms." : (($scope.charts[a].Teste == "Exchange") ? " trades." : " MBs"))+  " --- ");											
 				}
 			}
 
@@ -68,7 +68,7 @@ require_once('connection.php');
 	<span ng-repeat='chart in charts'>
 		<center>
 		<h3>Algoritmos de Ordenação com	<i>{{chart.Elementos}}<i> Elementos rodando em <b>{{chart.Navegador}}</b> - Resultado ID: {{chart.ResultadoID}}<br><br>
-		Teste de <b>{{chart.Teste}}<b></h3></center>
+		Teste de <b>{{chart.Teste}} - OBS: {{chart.Obs}}<b></h3></center>
 		<span class='row'><canvas id='{{chart.ID}}' width='500%' class='chart chart-bar' chart-data='chart.Data' chart-labels='chart.Labels'></canvas></span>	
 		<center><i>** {{chart.Info}}</i></center>
 		<hr>

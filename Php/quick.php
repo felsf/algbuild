@@ -41,11 +41,7 @@
 		rsort($array);
 	}
 
-	rsort($array);
-	printv($array);
-	echo "<br>";
-	run($array, 0, count($array) - 1);
-	printv($array);
+	run($array, 0, count($array) - 1);	
 
 	$fim = 0;
 
@@ -79,7 +75,7 @@
 
 		$quant = $_POST['quant'];	
 		$result = $db->query("SELECT resultado_id, COUNT(*) As Quant FROM resultados GROUP BY resultado_id HAVING Quant < 5");	
-		
+		$obs = "";
 		$id = $result->fetchArray()[0];	
 		$teste = ( (isset($_POST['temporization']) ? 'Temporization' : (isset($_POST['memory']) ? 'Memory' : (isset($_POST['exchange']) ? "Exchange" : ""))));
 
@@ -89,7 +85,12 @@
 			$id = ++$next_id[0];
 		} 	
 
-		$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant);";
+		if(isset($_POST['obs']))
+		{
+			$obs = $_POST['obs'];
+		}
+
+		$query = "INSERT INTO resultados VALUES ($id, '$teste', $fim, $alg_id, 'PHP', $quant, '$obs');";
 		$db->exec($query);
 		
 		$db->close();
