@@ -6,14 +6,15 @@
 
 	require_once('../connection.php');
 
-	function run(&$vector, $esquerda, $direita, &$trocas = 0)
+	//$quick_trocas = 0;
+
+	function run(&$vector, $esquerda, $direita, &$quick_trocas = 0)
 	{  
 		$esq = $esquerda;  
 	    $dir = $direita;  
 	    $pivot = $vector[intval(($esq + $dir) / 2)];  
 	   
-	    $troca = 0;
-	    $numTroca = 0;
+	    $troca = 0;	   
 
 	    while ($esq <= $dir) 
 	    {  
@@ -26,14 +27,14 @@
 	            $vector[$dir] = $troca;  
 	            $esq++;  
 	            $dir--;  	            
-	            $numTroca++;              
+	            ++$quick_trocas;
 	        }  	               
 	    }
 	    
-	    if ($dir > $esquerda) run($vector, $esquerda, $dir, $numTroca);  
-	    if ($esq < $direita)  run($vector, $esq, $direita, $numTroca);
+	    if ($dir > $esquerda) run($vector, $esquerda, $dir, $quick_trocas);  
+	    if ($esq < $direita)  run($vector, $esq, $direita, $quick_trocas);
 
-	    return $trocas;     
+	    return $quick_trocas;     
 	}
 
 	$array = (new Gerador())->gerar( (isset($_POST['quant']) ? $_POST['quant'] : 10));

@@ -166,7 +166,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {memory: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
+					data: {memory: true, obs: document.getElementById('obs').value, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},				
 					dataType: "html",
 					success: function(data) 
 					{
@@ -197,7 +197,7 @@
 			$.ajax({
 					type: "POST",
 					url: "php/"+$scope.buttons[a].Id,
-					data: {exchange: true, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},
+					data: {exchange: true, obs: document.getElementById('obs').value, quant: quantidade, repeat: document.getElementById('repeat').checked, decreased: document.getElementById('decreased').checked, alreadyInverted: document.getElementById('alreadyInverted').checked, save: true},
 					dataType: "html",
 					success: function(data) 
 					{
@@ -306,8 +306,7 @@
 	<center>
 		<label for="navegador">Navegador<input type='text' name='navegador' id='navegador' style='text-align: center'></label><br>
 		<label for="elementosjs">Quantidade de elementos no Array<input type='number' name='elementosjs' id='elementosjs' style='text-align: center'></label><br><br>
-		<button class='btn btn-lg btn-success' onClick="testAll(0,0)">Testar Todos (TEMPORIZATION TEST)</button><br><br>
-		<button class='btn btn-lg btn-danger' onclick='testAll(0, 1)'>Testar Todos (MEMORY TEST)</button><br><br>		
+		<button class='btn btn-lg btn-success' onClick="testAll(0,0)">Testar Todos (TEMPORIZATION TEST)</button><br><br>		
 		<label for="invertjs">Inverter Array?<input type='checkbox' name='invertjs' id='invertjs'></label>
 	</center>
 

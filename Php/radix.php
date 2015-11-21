@@ -27,8 +27,7 @@ function run(&$vector) {
         for ($i = 1; $i < 10; $i++)
             $bucket[$i] += $bucket[$i - 1];
         for ($i = count($vector) - 1; $i >= 0; $i--) {
-            $b[--$bucket[intval($vector[$i] / $exp) % 10]] = $vector[$i];
-            ++$trocas;
+            $b[--$bucket[intval($vector[$i] / $exp) % 10]] = $vector[$i];            
         }
         for ($i = 0; $i < count($vector); $i++){
             $vector[$i] = $b[$i];
@@ -38,7 +37,7 @@ function run(&$vector) {
         $exp *= 10;
     }
 
-    return $trocas;
+    return -1;
  }
 
 
